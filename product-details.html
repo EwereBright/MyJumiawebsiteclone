@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Jumia Nigeria</title>
+    <link rel="stylesheet" href="Styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Product Details Page Additional Styles */
+        .product-details-main {
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .product-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 0.8fr;
+            gap: 30px;
+        }
+        
+        /* Product Gallery */
+        .product-gallery {
+            position: sticky;
+            top: 100px;
+        }
+        
+        .main-image-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: #fff;
+            text-align: center;
+        }
+        
+        .main-image-container img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+        }
+        
+        .thumbnail-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        .thumbnail-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .thumbnail-item.active {
+            border-color: #f68b1e;
+        }
+        
+        .thumbnail-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+        }
+        
+        /* Product Info */
+        .product-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #282828;
+        }
+        
+        .product-rating-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .stars {
+            color: #ffc107;
+        }
+        
+        .reviews-link {
+            color: #f68b1e;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .price-section {
+            margin-bottom: 20px;
+        }
+        
+        .current-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .old-price {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 12px;
+        }
+        
+        .discount-badge {
+            background: #e74c3c;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: 12px;
+        }
+        
+        .shipping-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .shipping-info i {
+            color: #27ae60;
+            font-size: 20px;
+        }
+        
+        /* Options */
+        .options-section {
+            margin-bottom: 20px;
+        }
+        
+        .option-group {
+            margin-bottom: 20px;
+        }
+        
+        .option-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .color-options, .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        
+        .color-option.active {
+            border-color: #f68b1e;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #f68b1e;
+        }
+        
+        .color-option.black { background: #2c3e50; }
+        .color-option.blue { background: #3498db; }
+        .color-option.red { background: #e74c3c; }
+        .color-option.silver { background: #bdc3c7; }
+        .color-option.gold { background: #f39c12; }
+        .color-option.white { background: #ecf0f1; }
+        
+        .size-option {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .size-option.active {
+            border-color: #f68b1e;
+            background: #fff5e6;
+            color: #f68b1e;
+        }
+        
+        /* Quantity */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .qty-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+        }
+        
+        .qty-input {
+            width: 60px;
+            height: 36px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .btn-add-cart {
+            flex: 1;
+            padding: 14px;
+            background: #f68b1e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-buy-now {
+            flex: 1;
+            padding: 14px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-wishlist {
+            width: 50px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+        
+        .btn-wishlist:hover {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        /* Seller Card */
+        .seller-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .seller-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .seller-info p {
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .seller-info i {
+            width: 20px;
+            color: #f68b1e;
+        }
+        
+        .chat-seller {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #f68b1e;
+            color: #f68b1e;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        /* Description Section */
+        .description-section {
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .description-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .description-text {
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .specs-list {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+        
+        .specs-list li {
+            margin-bottom: 8px;
+        }
+        
+        /* Reviews Section */
+        .reviews-section {
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .reviews-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .review-summary {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .avg-rating {
+            text-align: center;
+        }
+        
+        .avg-rating .big-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #282828;
+        }
+        
+        .review-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .reviewer-name {
+            font-weight: 600;
+            color: #282828;
+        }
+        
+        .review-date {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .review-text {
+            color: #666;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+        
+        /* Toast Notification */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #27ae60;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast-notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 1024px) {
+            .product-details-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .seller-card {
+                grid-column: span 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .product-details-grid {
+                grid-template-columns: 1fr;
+            }
+            .seller-card {
+                grid-column: span 1;
+            }
+            .review-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Black Bar (Same as your original) -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="index.html" class="sell-link"><i class="fas fa-star"></i> Sell on Jumia</a>
+            </div>
+            <div class="top-bar-center">
+                <div class="top-slider">
+                    <div class="top-slide active">
+                        <i class="fas fa-star"></i>
+                        <span>Enjoy Free Delivery on Jumia</span>
+                    </div>
+                    <div class="top-slide">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>100% Secure Shopping</span>
+                    </div>
+                    <div class="top-slide">
+                        <i class="fas fa-undo"></i>
+                        <span>Free Returns on All Orders</span>
+                    </div>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="language-selector">
+                    <img src="https://flagcdn.com/w20/ng.png" alt="Nigeria">
+                    <span>English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header (Same as your original) -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-main">JUMIA</span>
+                        <span class="logo-tagline">Nigeria</span>
+                    </div>
+                </a>
+
+                <div class="search-wrapper">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search products, brands and categories" id="searchInput">
+                        <button class="search-btn">SEARCH</button>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <a href="login.html" class="action-item" id="accountBtn">
+                        <i class="far fa-user"></i>
+                        <div class="action-text">
+                            <span class="action-label">Hi, User</span>
+                            <span class="action-sub">Account</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </a>
+                    
+                    <div class="action-item" id="helpBtn">
+                        <i class="far fa-question-circle"></i>
+                        <div class="action-text">
+                            <span class="action-label">Help</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    
+                    <a href="cart.html" class="action-item cart-action">
+                        <div class="cart-icon-wrapper">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-badge" id="cartBadge">0</span>
+                        </div>
+                        <div class="action-text">
+                            <span class="action-label">Cart</span>
+                        </div>
+                    </a>
+                </div>
+
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation (Same as your original) -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <div class="categories-trigger" id="categoriesTrigger">
+                    <i class="fas fa-bars"></i>
+                    <span>All Categories</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Supermarket</a></li>
+                    <li><a href="#">Health & Beauty</a></li>
+                    <li><a href="#">Home & Office</a></li>
+                    <li><a href="#">Phones & Tablets</a></li>
+                    <li><a href="#">Computing</a></li>
+                    <li><a href="#">Electronics</a></li>
+                    <li><a href="#">Fashion</a></li>
+                    <li><a href="#">Gaming</a></li>
+                    <li><a href="#">Baby Products</a></li>
+                    <li><a href="#">Sporting Goods</a></li>
+                    <li><a href="#">Automobile</a></li>
+                    <li><a href="#">Other categories</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (Same as your original) -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="mobile-user">
+                <i class="far fa-user-circle"></i>
+                <span>Hi, User</span>
+            </div>
+            <button class="close-mobile" id="closeMobile">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content">
+            <div class="mobile-section">
+                <h4>MY JUMIA ACCOUNT</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-box"></i> Orders</a></li>
+                    <li><a href="#"><i class="far fa-heart"></i> Saved Items</a></li>
+                    <li><a href="#"><i class="fas fa-clock"></i> Recently Viewed</a></li>
+                </ul>
+            </div>
+            <div class="mobile-section">
+                <h4>OUR CATEGORIES</h4>
+                <ul class="mobile-categories-list">
+                    <li><a href="#">Supermarket <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Health & Beauty <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Home & Office <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Phones & Tablets <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Computing <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Electronics <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Fashion <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Gaming <i class="fas fa-chevron-right"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb" style="padding: 12px 0; background: transparent;">
+                <a href="index.html" style="color: #666; text-decoration: none;">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 10px; margin: 0 8px;"></i>
+                <a href="#" id="breadcrumbCategory" style="color: #666; text-decoration: none;">Category</a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; margin: 0 8px;"></i>
+                <span id="breadcrumbProduct" style="color: #282828;">Product Name</span>
+            </div>
+
+            <!-- Product Details Container -->
+            <div id="productDetailsContainer"></div>
+
+            <!-- Related Products -->
+            <div id="relatedProductsContainer"></div>
+        </div>
+    </main>
+
+    <!-- Footer (Same as your original) -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <i class="fas fa-envelope-open-text"></i>
+                        <div>
+                            <h3>Subscribe to our Newsletter</h3>
+                            <p>Get updates on our latest offers and deals</p>
+                        </div>
+                    </div>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">SUBSCRIBE</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>LET US HELP YOU</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">How to shop on Jumia</a></li>
+                        <li><a href="#">Delivery options and timelines</a></li>
+                        <li><a href="#">How to return a product</a></li>
+                        <li><a href="#">Corporate and bulk purchases</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>ABOUT JUMIA</h4>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Jumia Careers</a></li>
+                        <li><a href="#">Jumia Express</a></li>
+                        <li><a href="#">Terms and Conditions</a></li>
+                        <li><a href="#">Privacy and Cookie Notice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>MAKE MONEY WITH JUMIA</h4>
+                    <ul>
+                        <li><a href="#">Sell on Jumia</a></li>
+                        <li><a href="#">Become a Sales Consultant</a></li>
+                        <li><a href="#">Become a Logistics Service Partner</a></li>
+                        <li><a href="#">Join the Jumia DA Academy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>JUMIA INTERNATIONAL</h4>
+                    <div class="international-links">
+                        <a href="#">Algeria</a>
+                        <a href="#">Egypt</a>
+                        <a href="#">Ghana</a>
+                        <a href="#">Ivory Coast</a>
+                        <a href="#">Kenya</a>
+                        <a href="#">Morocco</a>
+                        <a href="#">Senegal</a>
+                        <a href="#">Tunisia</a>
+                        <a href="#">Uganda</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-section">
+                    <h4>JOIN US ON</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="payment-section">
+                    <h4>PAYMENT METHODS & DELIVERY PARTNERS</h4>
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                        <span class="payment-text">Cash on Delivery</span>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Jumia. All rights reserved. | Designed for educational purposes</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast-notification" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Item added to cart!</span>
+    </div>
+
+    <script src="products-data.js"></script>
+    <script src="Scripts.js"></script>
+    <script>
+        // Product Details Page Script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            const product = getProductById(parseInt(productId));
+            
+            if (!product) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Update breadcrumb
+            document.getElementById('breadcrumbCategory').textContent = product.category;
+            document.getElementById('breadcrumbProduct').textContent = product.name;
+            
+            // Render product details
+            renderProductDetails(product);
+            renderRelatedProducts(product.id, product.category);
+            
+            // Setup quantity selector
+            setupQuantitySelector();
+            
+            // Setup toast
+            const toast = document.getElementById('toast');
+            window.showToast = function(message) {
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            };
+        });
+        
+        function renderProductDetails(product) {
+            const container = document.getElementById('productDetailsContainer');
+            
+            // Generate color options HTML
+            const colorOptionsHtml = product.colors ? product.colors.map(color => `
+                <div class="color-option ${color.toLowerCase().replace(/\s/g, '')}" data-color="${color}" style="background: ${getColorCode(color)}"></div>
+            `).join('') : '';
+            
+            // Generate size options HTML
+            const sizeOptionsHtml = product.sizes ? product.sizes.map(size => `
+                <div class="size-option" data-size="${size}">${size}</div>
+            `).join('') : '';
+            
+            container.innerHTML = `
+                <div class="product-details-main">
+                    <div class="product-details-grid">
+                        <!-- Product Gallery -->
+                        <div class="product-gallery">
+                            <div class="main-image-container">
+                                <img src="${product.image}" alt="${product.name}" id="mainProductImage">
+                            </div>
+                            <div class="thumbnail-list" id="thumbnailList">
+                                ${product.images.map((img, idx) => `
+                                    <div class="thumbnail-item ${idx === 0 ? 'active' : ''}" data-image="${img}">
+                                        <img src="${img}" alt="Thumbnail">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Product Info -->
+                        <div class="product-info">
+                            <h1 class="product-title">${product.name}</h1>
+                            
+                            <div class="product-rating-section">
+                                <div class="stars">
+                                    ${generateStars(product.rating)}
+                                </div>
+                                <span>${product.rating}</span>
+                                <a href="#reviews" class="reviews-link">${product.reviews.toLocaleString()} reviews</a>
+                            </div>
+                            
+                            <div class="price-section">
+                                <span class="current-price">₦${product.price.toLocaleString()}</span>
+                                ${product.oldPrice ? `<span class="old-price">₦${product.oldPrice.toLocaleString()}</span>` : ''}
+                                ${product.discount > 0 ? `<span class="discount-badge">-${product.discount}%</span>` : ''}
+                            </div>
+                            
+                            <div class="shipping-info">
+                                <i class="fas fa-truck"></i>
+                                <span>Free delivery <strong>tomorrow</strong> if you order within <strong>2h 30m</strong></span>
+                            </div>
+                            
+                            <!-- Color Options -->
+                            ${product.colors ? `
+                                <div class="options-section">
+                                    <div class="option-group">
+                                        <div class="option-label">Color:</div>
+                                        <div class="color-options" id="colorOptions">
+                                            ${colorOptionsHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Size/Storage Options -->
+                            ${product.sizes ? `
+                                <div class="options-section">
+                                    <div class="option-group">
+                                        <div class="option-label">Storage/Size:</div>
+                                        <div class="size-options" id="sizeOptions">
+                                            ${sizeOptionsHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Quantity -->
+                            <div class="options-section">
+                                <div class="option-label">Quantity:</div>
+                                <div class="quantity-selector">
+                                    <button class="qty-btn" id="qtyMinus">-</button>
+                                    <input type="number" class="qty-input" id="qtyInput" value="1" min="1" max="10">
+                                    <button class="qty-btn" id="qtyPlus">+</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="action-buttons">
+                                <button class="btn-add-cart" id="addToCartBtn">
+                                    <i class="fas fa-shopping-cart"></i> ADD TO CART
+                                </button>
+                                <button class="btn-buy-now" id="buyNowBtn">
+                                    BUY NOW
+                                </button>
+                                <button class="btn-wishlist" id="wishlistBtn">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Product Meta -->
+                            <div class="product-meta-info" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+                                <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                                    <i class="fas fa-shield-alt" style="color: #27ae60;"></i>
+                                    <span style="font-size: 13px;">Official Jumia Warranty</span>
+                                </div>
+                                <div style="display: flex; gap: 15px;">
+                                    <i class="fas fa-undo" style="color: #27ae60;"></i>
+                                    <span style="font-size: 13px;">7 Days Returns</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Seller Card -->
+                        <div class="seller-card">
+                            <h3>Seller Information</h3>
+                            <div class="seller-info">
+                                <p><strong>Jumia Official Store</strong></p>
+                                <p><i class="fas fa-star"></i> 98% Positive feedback</p>
+                                <p><i class="fas fa-box"></i> 10,000+ items sold</p>
+                                <p><i class="fas fa-clock"></i> Ships within 24 hours</p>
+                                <button class="chat-seller">Chat with Seller</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Description Section -->
+                <div class="description-section">
+                    <h3>Product Description</h3>
+                    <div class="description-text">
+                        <p>${product.description}</p>
+                        <ul class="specs-list">
+                            ${product.specs.map(spec => `<li>${spec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Reviews Section -->
+                <div class="reviews-section" id="reviews">
+                    <h3>Customer Reviews</h3>
+                    <div class="review-summary">
+                        <div class="avg-rating">
+                            <div class="big-number">${product.rating}</div>
+                            <div class="stars">${generateStars(product.rating)}</div>
+                            <div>${product.reviews.toLocaleString()} ratings</div>
+                        </div>
+                    </div>
+                    <div class="reviews-list" id="reviewsList">
+                        ${generateSampleReviews(product.reviews)}
+                    </div>
+                </div>
+            `;
+            
+            // Setup thumbnail click handler
+            const thumbnails = document.querySelectorAll('.thumbnail-item');
+            const mainImage = document.getElementById('mainProductImage');
+            
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    thumbnails.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const newImage = this.getAttribute('data-image');
+                    if (mainImage) mainImage.src = newImage;
+                });
+            });
+            
+            // Setup color options
+            const colorOptions = document.querySelectorAll('.color-option');
+            colorOptions.forEach(opt => {
+                opt.addEventListener('click', function() {
+                    colorOptions.forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Setup size options
+            const sizeOptions = document.querySelectorAll('.size-option');
+            sizeOptions.forEach(opt => {
+                opt.addEventListener('click', function() {
+                    sizeOptions.forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Set first options as active
+            if (colorOptions.length) colorOptions[0].classList.add('active');
+            if (sizeOptions.length) sizeOptions[0].classList.add('active');
+            
+            // Setup add to cart
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', function() {
+                    const qty = parseInt(document.getElementById('qtyInput').value);
+                    const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || null;
+                    const selectedSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || null;
+                    
+                    addToCart(product.id, qty, selectedColor, selectedSize);
+                    showToast(`${product.name} added to cart!`);
+                    
+                    // Button animation
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i> ADDED';
+                    this.style.backgroundColor = '#27ae60';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.backgroundColor = '#f68b1e';
+                    }, 2000);
+                });
+            }
+            
+            // Setup buy now
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', function() {
+                    const qty = parseInt(document.getElementById('qtyInput').value);
+                    const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || null;
+                    const selectedSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || null;
+                    
+                    addToCart(product.id, qty, selectedColor, selectedSize);
+                    window.location.href = 'cart.html';
+                });
+            }
+            
+            // Setup wishlist
+            const wishlistBtn = document.getElementById('wishlistBtn');
+            if (wishlistBtn) {
+                wishlistBtn.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        this.style.backgroundColor = '#fff5e6';
+                        showToast('Added to wishlist!');
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        this.style.backgroundColor = '';
+                        showToast('Removed from wishlist!');
+                    }
+                });
+            }
+        }
+        
+        function renderRelatedProducts(currentId, category) {
+            const container = document.getElementById('relatedProductsContainer');
+            const related = getRelatedProducts(currentId, category);
+            
+            if (related.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="product-details-main" style="margin-top: 20px;">
+                    <h3 style="font-size: 20px; margin-bottom: 20px;">You May Also Like</h3>
+                    <div class="products-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+                        ${related.map(product => `
+                            <div class="product-card" data-product-id="${product.id}" style="cursor: pointer;">
+                                ${product.discount > 0 ? `<div class="discount-badge">-${product.discount}%</div>` : ''}
+                                <div class="product-image">
+                                    <img src="${product.image}" alt="${product.name}">
+                                    <div class="product-actions">
+                                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                                    </div>
+                                </div>
+                                <div class="product-details">
+                                    <h4 class="product-name">${product.name}</h4>
+                                    <div class="product-price">₦${product.price.toLocaleString()}</div>
+                                    ${product.oldPrice ? `<div class="product-old-price">₦${product.oldPrice.toLocaleString()}</div>` : ''}
+                                    <div class="product-rating">
+                                        <div class="stars">
+                                            ${generateStars(product.rating)}
+                                        </div>
+                                        <span>(${product.reviews})</span>
+                                    </div>
+                                    <button class="add-cart-btn" data-name="${product.name}" data-price="${product.price}">ADD TO CART</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Add click handlers for related products
+            document.querySelectorAll('#relatedProductsContainer .product-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('add-cart-btn') && !e.target.closest('.add-cart-btn') &&
+                        !e.target.classList.contains('wishlist-btn') && !e.target.closest('.wishlist-btn')) {
+                        const productId = this.getAttribute('data-product-id');
+                        if (productId) {
+                            window.location.href = `product-details.html?id=${productId}`;
+                        }
+                    }
+                });
+            });
+            
+            // Add to cart handlers for related products
+            document.querySelectorAll('#relatedProductsContainer .add-cart-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const productName = this.getAttribute('data-name');
+                    addToCart(parseInt(this.closest('.product-card').getAttribute('data-product-id')), 1);
+                    showToast(`${productName} added to cart!`);
+                    
+                    const originalText = this.textContent;
+                    this.textContent = '✓ ADDED';
+                    this.style.backgroundColor = '#27ae60';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.backgroundColor = '';
+                    }, 2000);
+                });
+            });
+        }
+        
+        function setupQuantitySelector() {
+            const minusBtn = document.getElementById('qtyMinus');
+            const plusBtn = document.getElementById('qtyPlus');
+            const qtyInput = document.getElementById('qtyInput');
+            
+            if (minusBtn && plusBtn && qtyInput) {
+                minusBtn.addEventListener('click', () => {
+                    let value = parseInt(qtyInput.value);
+                    if (value > 1) qtyInput.value = value - 1;
+                });
+                
+                plusBtn.addEventListener('click', () => {
+                    let value = parseInt(qtyInput.value);
+                    if (value < 10) qtyInput.value = value + 1;
+                });
+                
+                qtyInput.addEventListener('change', () => {
+                    let value = parseInt(qtyInput.value);
+                    if (isNaN(value) || value < 1) qtyInput.value = 1;
+                    else if (value > 10) qtyInput.value = 10;
+                });
+            }
+        }
+        
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = stars.length / 2; i < 5; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+        
+        function generateSampleReviews(totalReviews) {
+            const sampleReviews = [
+                { name: "Oluwaseun A.", date: "2 days ago", rating: 5, text: "Amazing product! Exceeded my expectations. Fast delivery too." },
+                { name: "Chioma N.", date: "1 week ago", rating: 4, text: "Good quality product. Works perfectly. Would recommend." },
+                { name: "Emeka O.", date: "2 weeks ago", rating: 5, text: "Very satisfied with my purchase. Great value for money." },
+                { name: "Fatima B.", date: "3 weeks ago", rating: 4, text: "Nice product. Delivery was quick and packaging was secure." }
+            ];
+            
+            return sampleReviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">${review.name}</span>
+                        <span class="review-date">${review.date}</span>
+                    </div>
+                    <div class="stars" style="font-size: 12px; margin-bottom: 8px;">
+                        ${generateStars(review.rating)}
+                    </div>
+                    <div class="review-text">${review.text}</div>
+                </div>
+            `).join('');
+        }
+        
+        function getColorCode(color) {
+            const colors = {
+                'Black': '#2c3e50',
+                'Blue': '#3498db',
+                'Red': '#e74c3c',
+                'Silver': '#bdc3c7',
+                'Gold': '#f39c12',
+                'White': '#ecf0f1',
+                'Deep Purple': '#5e3370',
+                'Space Black': '#1a1a1a',
+                'Midnight': '#2c3e50',
+                'Starlight': '#f5f0e6',
+                'Product Red': '#e31b23'
+            };
+            return colors[color] || '#95a5a6';
+        }
+    </script>
+</body>
+</html>

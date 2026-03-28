@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Jumia Nigeria</title>
+    <link rel="stylesheet" href="Styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Cart Page Styles */
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 24px;
+            margin: 20px 0;
+        }
+        
+        .cart-items-section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .cart-header {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 0.5fr;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 0.5fr;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .cart-product-info {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .cart-product-image {
+            width: 80px;
+            height: 80px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .cart-product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-product-details h4 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .cart-product-details p {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .cart-product-price {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+        
+        .cart-quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cart-qty-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .cart-qty-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        
+        .cart-item-total {
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .cart-remove {
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .cart-summary {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .cart-summary h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .summary-row.total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 15px;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 14px;
+            background: #f68b1e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-cart i {
+            font-size: 80px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .continue-shopping {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f68b1e;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+            .cart-header {
+                display: none;
+            }
+            .cart-item {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .cart-product-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .cart-product-image {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Black Bar (Same as your original) -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="index.html" class="sell-link"><i class="fas fa-star"></i> Sell on Jumia</a>
+            </div>
+            <div class="top-bar-center">
+                <div class="top-slider">
+                    <div class="top-slide active">
+                        <i class="fas fa-star"></i>
+                        <span>Enjoy Free Delivery on Jumia</span>
+                    </div>
+                    <div class="top-slide">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>100% Secure Shopping</span>
+                    </div>
+                    <div class="top-slide">
+                        <i class="fas fa-undo"></i>
+                        <span>Free Returns on All Orders</span>
+                    </div>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="language-selector">
+                    <img src="https://flagcdn.com/w20/ng.png" alt="Nigeria">
+                    <span>English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-main">JUMIA</span>
+                        <span class="logo-tagline">Nigeria</span>
+                    </div>
+                </a>
+
+                <div class="search-wrapper">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search products, brands and categories" id="searchInput">
+                        <button class="search-btn">SEARCH</button>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <a href="login.html" class="action-item">
+                        <i class="far fa-user"></i>
+                        <div class="action-text">
+                            <span class="action-label">Hi, User</span>
+                            <span class="action-sub">Account</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </a>
+                    
+                    <div class="action-item">
+                        <i class="far fa-question-circle"></i>
+                        <div class="action-text">
+                            <span class="action-label">Help</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    
+                    <a href="cart.html" class="action-item cart-action">
+                        <div class="cart-icon-wrapper">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-badge" id="cartBadge">0</span>
+                        </div>
+                        <div class="action-text">
+                            <span class="action-label">Cart</span>
+                        </div>
+                    </a>
+                </div>
+
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <div class="categories-trigger">
+                    <i class="fas fa-bars"></i>
+                    <span>All Categories</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Supermarket</a></li>
+                    <li><a href="#">Health & Beauty</a></li>
+                    <li><a href="#">Home & Office</a></li>
+                    <li><a href="#">Phones & Tablets</a></li>
+                    <li><a href="#">Computing</a></li>
+                    <li><a href="#">Electronics</a></li>
+                    <li><a href="#">Fashion</a></li>
+                    <li><a href="#">Gaming</a></li>
+                    <li><a href="#">Baby Products</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb" style="padding: 12px 0; background: transparent;">
+                <a href="index.html" style="color: #666; text-decoration: none;">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 10px; margin: 0 8px;"></i>
+                <span style="color: #282828;">Shopping Cart</span>
+            </div>
+
+            <div id="cartContainer"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <i class="fas fa-envelope-open-text"></i>
+                        <div>
+                            <h3>Subscribe to our Newsletter</h3>
+                            <p>Get updates on our latest offers and deals</p>
+                        </div>
+                    </div>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">SUBSCRIBE</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>LET US HELP YOU</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">How to shop on Jumia</a></li>
+                        <li><a href="#">Delivery options</a></li>
+                        <li><a href="#">How to return a product</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>ABOUT JUMIA</h4>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Jumia Careers</a></li>
+                        <li><a href="#">Terms and Conditions</a></li>
+                        <li><a href="#">Privacy Notice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>MAKE MONEY WITH JUMIA</h4>
+                    <ul>
+                        <li><a href="#">Sell on Jumia</a></li>
+                        <li><a href="#">Become a Vendor</a></li>
+                        <li><a href="#">Become an Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>JUMIA INTERNATIONAL</h4>
+                    <div class="international-links">
+                        <a href="#">Algeria</a>
+                        <a href="#">Egypt</a>
+                        <a href="#">Ghana</a>
+                        <a href="#">Kenya</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-section">
+                    <h4>JOIN US ON</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="payment-section">
+                    <h4>PAYMENT METHODS</h4>
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                        <span class="payment-text">Cash on Delivery</span>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Jumia. All rights reserved. | Designed for educational purposes</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-notification" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Cart updated!</span>
+    </div>
+
+    <script src="products-data.js"></script>
+    <script src="Scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCart();
+            
+            const toast = document.getElementById('toast');
+            window.showToast = function(message) {
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            };
+        });
+        
+        function renderCart() {
+            const container = document.getElementById('cartContainer');
+            const cart = JSON.parse(localStorage.getItem('jumiaCart')) || [];
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="cart-items-section">
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <p>Your cart is empty</p>
+                            <a href="index.html" class="continue-shopping">Continue Shopping</a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const subtotal = getCartTotal();
+            const shipping = subtotal > 100000 ? 0 : 2500;
+            const total = subtotal + shipping;
+            
+            container.innerHTML = `
+                <div class="cart-container">
+                    <div class="cart-items-section">
+                        <div class="cart-header">
+                            <span>Product</span>
+                            <span>Price</span>
+                            <span>Quantity</span>
+                            <span>Total</span>
+                        </div>
+                        <div id="cartItemsList">
+                            ${cart.map(item => `
+                                <div class="cart-item" data-id="${item.id}">
+                                    <div class="cart-product-info">
+                                        <div class="cart-product-image">
+                                            <img src="${item.image}" alt="${item.name}">
+                                        </div>
+                                        <div class="cart-product-details">
+                                            <h4>${item.name}</h4>
+                                            ${item.color ? `<p>Color: ${item.color}</p>` : ''}
+                                            ${item.size ? `<p>Size: ${item.size}</p>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="cart-product-price">₦${item.price.toLocaleString()}</div>
+                                    <div class="cart-quantity">
+                                        <button class="cart-qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                                        <input type="text" class="cart-qty-input" value="${item.quantity}" readonly>
+                                        <button class="cart-qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                                    </div>
+                                    <div class="cart-item-total">₦${(item.price * item.quantity).toLocaleString()}</div>
+                                    <div class="cart-remove" onclick="removeCartItem(${item.id})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="cart-summary">
+                        <h3>Order Summary</h3>
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>₦${subtotal.toLocaleString()}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>${shipping === 0 ? 'FREE' : `₦${shipping.toLocaleString()}`}</span>
+                        </div>
+                        ${shipping > 0 ? '<div class="summary-row" style="color: #27ae60;"><span>Add ₦' + (100000 - subtotal).toLocaleString() + ' more for FREE shipping</span><span></span></div>' : ''}
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>₦${total.toLocaleString()}</span>
+                        </div>
+                        <button class="checkout-btn" onclick="checkout()">PROCEED TO CHECKOUT</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) {
+                removeCartItem(productId);
+                return;
+            }
+            
+            let cart = JSON.parse(localStorage.getItem('jumiaCart')) || [];
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity = newQuantity;
+                localStorage.setItem('jumiaCart', JSON.stringify(cart));
+                updateCartCount();
+                renderCart();
+                showToast('Cart updated');
+            }
+        }
+        
+        function removeCartItem(productId) {
+            let cart = JSON.parse(localStorage.getItem('jumiaCart')) || [];
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('jumiaCart', JSON.stringify(cart));
+            updateCartCount();
+            renderCart();
+            showToast('Item removed from cart');
+        }
+        
+        function checkout() {
+            alert('Thank you for shopping with us! This is a demo checkout.');
+            localStorage.removeItem('jumiaCart');
+            updateCartCount();
+            renderCart();
+            showToast('Order placed successfully!');
+        }
+    </script>
+</body>
+</html>
