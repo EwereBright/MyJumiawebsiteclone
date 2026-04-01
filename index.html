@@ -3,126 +3,433 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jumia Nigeria | Shop Online</title>
+    <title>Jumia Nigeria | Online Shopping for Electronics, Fashion, Home, Beauty & Sport</title>
     <link rel="stylesheet" href="Styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <!-- Top Promo Banner -->
-    <div class="top-promo" style="background:#b077d9; text-align:center; padding:8px 0;">
-        <img src="NEXUS-TW-BD_Desktop_top-strip.gif" alt="Promo" style="max-width:100%; height:auto;">
-    </div>
+    <div class="banner" data-bnrid="57" data-end="2026-12-31T23:59:00+01:00" style="background:#b077d9;"><div class="row _no-go -phs"><a class="col16 ar _1168-56" data-track-onview="eecPromo" data-track-onclick-bound="true"><img src="NEXUS-TW-BD_Desktop_top-strip.gif" ></a></div></div>
 
     <!-- Top Black Bar -->
     <div class="top-bar">
         <div class="container">
-            <a href="#" class="sell-link"><i class="fas fa-star"></i> Sell on Jumia</a>
-            <div class="top-slider">
-                <div class="top-slide active">Enjoy Free Delivery on Jumia</div>
-                <div class="top-slide">100% Secure Shopping</div>
+            <div class="top-bar-left">
+                <a href="#" class="sell-link"><i class="fas fa-star"></i> Sell on Jumia</a>
+            </div>
+            <div class="top-bar-center">
+                <div class="top-slider">
+                    <div class="top-slide active">
+                        <i class="fas fa-star"></i>
+                        <span>Enjoy Free Delivery on Jumia</span>
+                    </div>
+                    <div class="top-slide">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>100% Secure Shopping</span>
+                    </div>
+                    <div class="top-slide">
+                        <i class="fas fa-undo"></i>
+                        <span>Free Returns on All Orders</span>
+                    </div>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="language-selector">
+                    <img src="https://flagcdn.com/w20/ng.png" alt="Nigeria">
+                    <span>English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Header -->
+    <!-- Main Header -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
                 <a href="#" class="logo">
-                    <span class="logo-main">JUMIA</span>
-                    <span class="logo-tagline">Nigeria</span>
+                    <div class="logo-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-main">JUMIA</span>
+                        <span class="logo-tagline">Nigeria</span>
+                    </div>
                 </a>
 
                 <div class="search-wrapper">
                     <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Search products, brands and categories">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search products, brands and categories" id="searchInput">
+                        <button class="search-btn">SEARCH</button>
                     </div>
                 </div>
 
                 <div class="header-actions">
-                    <a href="#" class="action-item"><i class="far fa-user"></i></a>
-                    <a href="cart.html" class="action-item cart-action">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-badge" id="cartBadge">0</span>
-                    </a>
+                    <div class="action-item" id="accountBtn">
+                        <i class="far fa-user"></i>
+                        <div class="action-text">
+                            <span class="action-label">Hi, User</span>
+                            <span class="action-sub">Account</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    
+                    <div class="action-item" id="helpBtn">
+                        <i class="far fa-question-circle"></i>
+                        <div class="action-text">
+                            <span class="action-label">Help</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    
+                    <div class="action-item cart-action" id="cartBtn">
+                        <div class="cart-icon-wrapper">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-badge" id="cartBadge">0</span>
+                        </div>
+                        <div class="action-text">
+                            <span class="action-label">Cart</span>
+                        </div>
+                    </div>
                 </div>
 
-                <button class="mobile-toggle" id="mobileToggle"><i class="fas fa-bars"></i></button>
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Desktop Nav -->
+    <!-- Navigation Bar -->
     <nav class="main-nav">
         <div class="container">
-            <ul class="nav-links">
-                <li><a href="#">Supermarket</a></li>
-                <li><a href="#">Phones & Tablets</a></li>
-                <li><a href="#">Fashion</a></li>
-                <li><a href="#">Electronics</a></li>
-                <li><a href="#">Home & Kitchen</a></li>
-            </ul>
+            <div class="nav-content">
+                <div class="categories-trigger" id="categoriesTrigger">
+                    <i class="fas fa-bars"></i>
+                    <span>All Categories</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Supermarket</a></li>
+                    <li><a href="#">Health & Beauty</a></li>
+                    <li><a href="#">Home & Office</a></li>
+                    <li><a href="#">Phones & Tablets</a></li>
+                    <li><a href="#">Computing</a></li>
+                    <li><a href="#">Electronics</a></li>
+                    <li><a href="#">Fashion</a></li>
+                    <li><a href="#">Gaming</a></li>
+                    <li><a href="#">Baby Products</a></li>
+                    <li><a href="#">Sporting Goods</a></li>
+                    <li><a href="#">Automobile</a></li>
+                    <li><a href="#">Other categories</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu Overlay -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
-        <button class="close-mobile" id="closeMobile">✕</button>
-        <h3>Categories</h3>
-        <!-- Add your categories here if needed -->
+        <div class="mobile-menu-header">
+            <div class="mobile-user">
+                <i class="far fa-user-circle"></i>
+                <span>Hi, User</span>
+            </div>
+            <button class="close-mobile" id="closeMobile">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content">
+            <div class="mobile-section">
+                <h4>MY JUMIA ACCOUNT</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-box"></i> Orders</a></li>
+                    <li><a href="#"><i class="far fa-heart"></i> Saved Items</a></li>
+                    <li><a href="#"><i class="fas fa-clock"></i> Recently Viewed</a></li>
+                </ul>
+            </div>
+            <div class="mobile-section">
+                <h4>OUR CATEGORIES</h4>
+                <ul class="mobile-categories-list">
+                    <li><a href="#">Supermarket <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Health & Beauty <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Home & Office <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Phones & Tablets <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Computing <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Electronics <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Fashion <i class="fas fa-chevron-right"></i></a></li>
+                    <li><a href="#">Gaming <i class="fas fa-chevron-right"></i></a></li>
+                </ul>
+            </div>
+            <div class="mobile-section">
+                <h4>HELP & SETTINGS</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-headset"></i> Help Center</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Track Order</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- Hero Slider -->
-    <section class="hero-section">
-        <div class="main-slider" id="sliderWrapper">
-            <div class="slide active"><img src="Artboard_1.jpg" alt="Banner"></div>
-            <div class="slide"><img src="Artboard2.jpg" alt="Banner"></div>
-            <div class="slide"><img src="Artboard 3.jpg" alt="Banner"></div>
-            <div class="slide"><img src="Artboard 4.jpg" alt="Banner"></div>
-        </div>
-        <button class="slider-nav prev" id="sliderPrev">‹</button>
-        <button class="slider-nav next" id="sliderNext">›</button>
-    </section>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section with Sidebar -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-grid">
+                    <!-- Categories Sidebar -->
+                    <aside class="sidebar-categories" id="sidebarCategories">
+                        <ul class="sidebar-list">
+                            <li class="sidebar-item">
+                                <i class="fas fa-utensils"></i>
+                                <span>Supermarket</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-heartbeat"></i>
+                                <span>Health & Beauty</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-home"></i>
+                                <span>Home & Office</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Phones & Tablets</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-laptop"></i>
+                                <span>Computing</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-tv"></i>
+                                <span>Electronics</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-tshirt"></i>
+                                <span>Fashion</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-baby"></i>
+                                <span>Baby Products</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Gaming</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-futbol"></i>
+                                <span>Sporting Goods</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-car"></i>
+                                <span>Automobile</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="sidebar-item">
+                                <i class="fas fa-tools"></i>
+                                <span>Industrial & Scientific</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                        </ul>
+                    </aside>
 
-    <!-- Flash Sales -->
-    <section class="flash-sales">
-        <div class="container">
-            <div class="section-header">
-                <h2>🔥 Flash Sales</h2>
-                <div class="countdown" id="countdown">
-                    <span id="hours">04</span>h : 
-                    <span id="minutes">32</span>m : 
-                    <span id="seconds">15</span>s
+                    <!-- Main Slider -->
+                    <div class="main-slider">
+                        <div class="slider-wrapper" id="sliderWrapper">
+                            <div class="slide active">
+                                <img src="Artboard_1.jpg">
+                                <div class="slide-overlay"></div>
+                            </div>
+                            <div class="slide">
+                                <img src="Artboard2.jpg">
+                                <div class="slide-overlay"></div>
+                            </div>
+                            <div class="slide">
+                                <img src="Artboard 3.jpg">
+                                <div class="slide-overlay">
+                                    <button>SHOP NOW</button>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <img src="Artboard 4.jpg">
+                                <div class="slide-overlay"></div>
+                            </div>
+                        </div>
+                        <button class="slider-nav prev" id="sliderPrev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-nav next" id="sliderNext"><i class="fas fa-chevron-right"></i></button>
+                        <div class="slider-dots" id="sliderDots">
+                            <span class="dot active" data-index="0"></span>
+                            <span class="dot" data-index="1"></span>
+                            <span class="dot" data-index="2"></span>
+                            <span class="dot" data-index="3"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right Promo Cards -->
+                    <div class="promo-cards">
+                        <div class="promo-card">
+                            <div class="promo-content">
+                                <small>CALL TO ORDER</small>
+                                <h3>0700 600 0000</h3>
+                                <p>8am - 8pm Daily</p>
+                            </div>
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="promo-card orange">
+                            <img src="JFORCE-2.gif">
+                            <i class="fas fa-store"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="flash-products" id="flashProducts">
-                <!-- Products populated by JS -->
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Top Selling -->
-    <section class="top-selling">
+        <!-- Flash Sales Section -->
+        <section class="flash-sales">
+            <div class="container">
+                <div class="section-header">
+                    <div class="flash-title-wrapper">
+                        <div class="flash-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h2>Flash Sales</h2>
+                        <div class="countdown" id="countdown">
+                            <span class="time-box" id="hours">04</span>
+                            <span class="separator">:</span>
+                            <span class="time-box" id="minutes">32</span>
+                            <span class="separator">:</span>
+                            <span class="time-box" id="seconds">15</span>
+                        </div>
+                    </div>
+                    <a href="#" class="see-all">SEE ALL <i class="fas fa-chevron-right"></i></a>
+                </div>
+                
+                <div class="flash-slider-container">
+                    <button class="flash-nav prev" id="flashPrev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="flash-products" id="flashProducts">
+                        <!-- Flash cards were here in your original -->
+                    </div>
+                    <button class="flash-nav next" id="flashNext"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Selling Products -->
+        <section class="top-selling">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Top Selling Products</h2>
+                    <a href="#" class="see-all">SEE ALL <i class="fas fa-chevron-right"></i></a>
+                </div>
+                
+                <div class="products-grid" id="productsGrid">
+                    <!-- Product cards were here in your original -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
         <div class="container">
-            <h2 class="section-title">Top Selling</h2>
-            <div class="products-grid" id="productsGrid">
-                <!-- Products populated by JS -->
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <i class="fas fa-envelope-open-text"></i>
+                        <div>
+                            <h3>Subscribe to our Newsletter</h3>
+                            <p>Get updates on our latest offers and deals</p>
+                        </div>
+                    </div>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">SUBSCRIBE</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>LET US HELP YOU</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">How to shop on Jumia</a></li>
+                        <li><a href="#">Delivery options</a></li>
+                        <li><a href="#">How to return a product</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>ABOUT JUMIA</h4>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Jumia Careers</a></li>
+                        <li><a href="#">Terms and Conditions</a></li>
+                        <li><a href="#">Privacy Notice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>MAKE MONEY WITH JUMIA</h4>
+                    <ul>
+                        <li><a href="#">Sell on Jumia</a></li>
+                        <li><a href="#">Become a Vendor</a></li>
+                        <li><a href="#">Become an Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>JUMIA INTERNATIONAL</h4>
+                    <div class="international-links">
+                        <a href="#">Algeria</a>
+                        <a href="#">Egypt</a>
+                        <a href="#">Ghana</a>
+                        <a href="#">Kenya</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-section">
+                    <h4>JOIN US ON</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="payment-section">
+                    <h4>PAYMENT METHODS</h4>
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                        <span class="payment-text">Cash on Delivery</span>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Jumia. All rights reserved. | Designed for educational purposes</p>
             </div>
         </div>
-    </section>
+    </footer>
 
-    <!-- Mobile Bottom Navigation -->
-    <nav class="mobile-bottom-nav">
-        <a href="#" class="bottom-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-        <a href="#" onclick="toggleMobileMenu()" class="bottom-nav-item"><i class="fas fa-th-large"></i><span>Categories</span></a>
-        <a href="#" class="bottom-nav-item"><i class="fas fa-fire"></i><span>Deals</span></a>
-        <a href="cart.html" class="bottom-nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
-        <a href="#" class="bottom-nav-item"><i class="far fa-user"></i><span>Account</span></a>
-    </nav>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Item added to cart!</span>
+    </div>
 
     <script src="Scripts.js"></script>
     <script src="products-data.js"></script>
