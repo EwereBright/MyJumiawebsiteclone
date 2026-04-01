@@ -294,4 +294,81 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
 
     console.log('Jumia replica initialized successfully!');
+        // ==========================================
+    // MOBILE-SPECIFIC ENHANCEMENTS
+    // ==========================================
+    
+    // Touch swipe for sliders
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    const sliderElement = document.querySelector('.main-slider');
+    
+    sliderElement.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+    
+    sliderElement.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, {passive: true});
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            stopSlider();
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+            startSlider();
+        }
+    }
+    
+    // Flash products touch swipe
+    const flashContainer = document.getElementById('flashProducts');
+    let flashStartX = 0;
+    let flashScrollLeft = 0;
+    
+    flashContainer.addEventListener('touchstart', (e) => {
+        flashStartX = e.touches[0].pageX - flashContainer.offsetLeft;
+        flashScrollLeft = flashContainer.scrollLeft;
+    }, {passive: true});
+    
+    flashContainer.addEventListener('touchmove', (e) => {
+        const x = e.touches[0].pageX - flashContainer.offsetLeft;
+        const walk = (x - flashStartX) * 2;
+        flashContainer.scrollLeft = flashScrollLeft - walk;
+    }, {passive: true});
+    
+    // Responsive cart badge position fix
+    function updateCartPosition() {
+        const cartBadge = document.getElementById('cartBadge');
+        const isMobile = window.innerWidth <= 767;
+        
+        if (isMobile) {
+            cartBadge.style.top = '-6px';
+            cartBadge.style.right = '-6px';
+            cartBadge.style.fontSize = '9px';
+            cartBadge.style.width = '16px';
+            cartBadge.style.height = '16px';
+        }
+    }
+    
+    window.addEventListener('resize', updateCartPosition);
+    updateCartPosition(); // Initial call
+    
+    // Double-tap to zoom prevention for buttons
+    document.querySelectorAll('button, a').forEach(el => {
+        el.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            el.click();
+        }, {passive: false});
+    });
+    
+    // Pull-to-refresh prevention for mobile
+    document.body.style.overscrollBehavior = 'none';
 });
