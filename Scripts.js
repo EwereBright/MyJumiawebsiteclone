@@ -12,22 +12,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileOverlay = document.getElementById('mobileOverlay');
     const closeMobile = document.getElementById('closeMobile');
 
-    function openMobileMenu() {
+       function openMobileMenu() {
         mobileMenu.classList.add('active');
         mobileOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('menu-open');
+        
+        // Save scroll position
+        document.body.dataset.scrollY = window.scrollY;
     }
 
     function closeMobileMenu() {
         mobileMenu.classList.remove('active');
         mobileOverlay.classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
+        
+        // Restore scroll position
+        const scrollY = document.body.dataset.scrollY || '0';
+        window.scrollTo(0, parseInt(scrollY || '0'));
     }
-
-    mobileToggle.addEventListener('click', openMobileMenu);
-    closeMobile.addEventListener('click', closeMobileMenu);
-    mobileOverlay.addEventListener('click', closeMobileMenu);
-
     // ==========================================
     // TOP BAR SLIDER
     // ==========================================
@@ -294,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
 
     console.log('Jumia replica initialized successfully!');
+
         // ==========================================
     // MOBILE-SPECIFIC ENHANCEMENTS
     // ==========================================
