@@ -17,16 +17,6 @@
     --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
 }
-.nexus-banner {
-    background-image: url('your-nexus-live.gif');   /* or .webp/mp4 for better performance */
-    background-size: cover;          /* fills the area, crops if needed */
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    min-height: 300px;               /* or use aspect-ratio instead */
-    aspect-ratio: 16 / 9;            /* recommended */
-}
-}
 
 body {
     font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
