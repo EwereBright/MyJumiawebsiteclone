@@ -17,6 +17,48 @@
     --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
 }
+
+/* ==========================================
+   TOP BANNER - RESPONSIVE
+   ========================================== */
+.top-banner-container {
+    width: 100%;
+    background-color: #b077d9; /* Match your banner background */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-banner-link {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+.top-banner-img {
+    width: 100%;
+    max-width: 1200px; /* Maximum width for large screens */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+/* Mobile banner adjustments */
+@media (max-width: 768px) {
+    .top-banner-img {
+        max-width: 100%;
+        min-height: 40px; /* Minimum height on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .top-banner-img {
+        min-height: 35px;
+    }
+}
 /* ==================== FIX HEADER OVERLAP ON ALL PAGES ==================== */
 body {
     padding-top: 0; /* reset if needed */
