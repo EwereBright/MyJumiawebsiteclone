@@ -447,7 +447,7 @@
     </style>
 </head>
 <body>
-    <!-- Top Black Bar (Same as your original) -->
+    <!-- Top Black Bar -->
     <div class="top-bar">
         <div class="container">
             <div class="top-bar-left">
@@ -479,7 +479,7 @@
         </div>
     </div>
 
-    <!-- Main Header (Same as your original) -->
+    <!-- Main Header -->
     <header class="main-header">
         <div class="container">
             <div class="header-content">
@@ -537,7 +537,7 @@
         </div>
     </header>
 
-    <!-- Navigation (Same as your original) -->
+    <!-- Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="nav-content">
@@ -563,7 +563,7 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu (Same as your original) -->
+    <!-- Mobile Menu -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-header">
@@ -614,12 +614,12 @@
             <!-- Product Details Container -->
             <div id="productDetailsContainer"></div>
 
-            <!-- Related Products -->
+            <!-- Related Products Container -->
             <div id="relatedProductsContainer"></div>
         </div>
     </main>
 
-    <!-- Footer (Same as your original) -->
+    <!-- Footer -->
     <footer class="main-footer">
         <div class="container">
             <div class="newsletter-section">
@@ -716,448 +716,232 @@
         <span id="toastMessage">Item added to cart!</span>
     </div>
 
-    <script src="products-data.js"></script>
-    <script src="Scripts.js"></script>
+    <!-- Inline product database and helpers (combined to avoid external dependencies) -->
     <script>
-        // Product Details Page Script
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get product ID from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('id');
-            
-            if (!productId) {
-                window.location.href = 'index.html';
-                return;
+        // ---------- PRODUCT DATABASE ----------
+        const productsDatabase = [
+            {
+                id: 1,
+                name: "Apple iPhone 15 Pro Max (256GB) - Black Titanium",
+                category: "Phones & Tablets",
+                price: 1450000,
+                oldPrice: 1650000,
+                discount: 12,
+                rating: 4.8,
+                reviews: 1243,
+                image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400",
+                images: [
+                    "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400",
+                    "https://images.unsplash.com/photo-1695048132945-7d6a4b9d2d3a?w=400",
+                    "https://images.unsplash.com/photo-1695048133571-9b5b2f4c5e2a?w=400",
+                    "https://images.unsplash.com/photo-1695048134189-1a2f3b4c6d7e?w=400"
+                ],
+                colors: ["Black", "Blue", "Silver"],
+                sizes: ["256GB", "512GB", "1TB"],
+                description: "The latest iPhone 15 Pro Max with A17 Pro chip, titanium design, and advanced camera system. Experience unprecedented performance and battery life.",
+                specs: ["A17 Pro chip with 6-core GPU", "48MP Main camera with 24MP default", "Up to 29 hours video playback", "Super Retina XDR display with ProMotion", "USB-C connector with USB 3 support"]
+            },
+            {
+                id: 2,
+                name: "Samsung Galaxy S24 Ultra 512GB",
+                category: "Phones & Tablets",
+                price: 1350000,
+                oldPrice: 1550000,
+                discount: 13,
+                rating: 4.7,
+                reviews: 892,
+                image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400",
+                images: ["https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400"],
+                colors: ["Black", "Silver", "Deep Purple"],
+                sizes: ["256GB", "512GB"],
+                description: "Galaxy S24 Ultra with Galaxy AI, titanium frame and intelligent camera.",
+                specs: ["200MP Camera", "Snapdragon 8 Gen 3", "5000mAh Battery", "S Pen included"]
             }
-            
-            const product = getProductById(parseInt(productId));
-            
-            if (!product) {
-                window.location.href = 'index.html';
-                return;
+        ];
+
+        function getProductById(id) {
+            return productsDatabase.find(p => p.id === id) || null;
+        }
+
+        function getRelatedProducts(currentId, category) {
+            return productsDatabase.filter(p => p.id !== currentId && p.category === category).slice(0, 5);
+        }
+
+        // ---------- CART FUNCTIONS (safe, no overlap) ----------
+        function addToCart(productId, quantity, color = null, size = null) {
+            let cart = JSON.parse(localStorage.getItem('jumiaCart')) || [];
+            const existingIndex = cart.findIndex(item => item.id === productId && item.color === color && item.size === size);
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += quantity;
+            } else {
+                const product = getProductById(productId);
+                if (product) {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: quantity,
+                        image: product.image,
+                        color: color,
+                        size: size
+                    });
+                }
             }
-            
-            // Update breadcrumb
-            document.getElementById('breadcrumbCategory').textContent = product.category;
-            document.getElementById('breadcrumbProduct').textContent = product.name;
-            
-            // Render product details
-            renderProductDetails(product);
-            renderRelatedProducts(product.id, product.category);
-            
-            // Setup quantity selector
-            setupQuantitySelector();
-            
-            // Setup toast
+            localStorage.setItem('jumiaCart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('jumiaCart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartBadge');
+            if (badge) badge.textContent = totalItems;
+        }
+
+        function showToast(message) {
             const toast = document.getElementById('toast');
-            window.showToast = function(message) {
-                const toastMessage = document.getElementById('toastMessage');
-                toastMessage.textContent = message;
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
-            };
-        });
-        
+            const toastMessage = document.getElementById('toastMessage');
+            if (!toast || !toastMessage) return;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Helper: Generate star rating
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            let stars = '';
+            for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+            if (hasHalfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+            for (let i = stars.length / 2; i < 5; i++) stars += '<i class="far fa-star"></i>';
+            return stars;
+        }
+
+        function getColorCode(colorName) {
+            const map = { 'Black':'#2c3e50','Blue':'#3498db','Red':'#e74c3c','Silver':'#bdc3c7','Gold':'#f39c12','White':'#ecf0f1','Deep Purple':'#5e3370','Starlight':'#f5f0e6' };
+            return map[colorName] || '#95a5a6';
+        }
+
+        // Render product details (completely isolated layout)
         function renderProductDetails(product) {
             const container = document.getElementById('productDetailsContainer');
+            if (!container) return;
             
-            // Generate color options HTML
-            const colorOptionsHtml = product.colors ? product.colors.map(color => `
-                <div class="color-option ${color.toLowerCase().replace(/\s/g, '')}" data-color="${color}" style="background: ${getColorCode(color)}"></div>
-            `).join('') : '';
-            
-            // Generate size options HTML
-            const sizeOptionsHtml = product.sizes ? product.sizes.map(size => `
-                <div class="size-option" data-size="${size}">${size}</div>
-            `).join('') : '';
+            const colorOptionsHtml = product.colors ? product.colors.map(color => `<div class="color-option ${color.toLowerCase().replace(/\s/g, '')}" data-color="${color}" style="background: ${getColorCode(color)}"></div>`).join('') : '';
+            const sizeOptionsHtml = product.sizes ? product.sizes.map(size => `<div class="size-option" data-size="${size}">${size}</div>`).join('') : '';
+            const sampleReviews = [
+                { name: "Oluwaseun A.", date: "2 days ago", rating: 5, text: "Amazing product! Exceeded my expectations. Fast delivery too." },
+                { name: "Chioma N.", date: "1 week ago", rating: 4, text: "Good quality product. Works perfectly. Would recommend." },
+                { name: "Emeka O.", date: "2 weeks ago", rating: 5, text: "Very satisfied with my purchase. Great value for money." }
+            ];
             
             container.innerHTML = `
                 <div class="product-details-main">
                     <div class="product-details-grid">
-                        <!-- Product Gallery -->
                         <div class="product-gallery">
                             <div class="main-image-container">
                                 <img src="${product.image}" alt="${product.name}" id="mainProductImage">
                             </div>
                             <div class="thumbnail-list" id="thumbnailList">
-                                ${product.images.map((img, idx) => `
-                                    <div class="thumbnail-item ${idx === 0 ? 'active' : ''}" data-image="${img}">
-                                        <img src="${img}" alt="Thumbnail">
-                                    </div>
-                                `).join('')}
+                                ${product.images.map((img, idx) => `<div class="thumbnail-item ${idx === 0 ? 'active' : ''}" data-image="${img}"><img src="${img}" alt="Thumbnail"></div>`).join('')}
                             </div>
                         </div>
-                        
-                        <!-- Product Info -->
                         <div class="product-info">
                             <h1 class="product-title">${product.name}</h1>
-                            
                             <div class="product-rating-section">
-                                <div class="stars">
-                                    ${generateStars(product.rating)}
-                                </div>
+                                <div class="stars">${generateStars(product.rating)}</div>
                                 <span>${product.rating}</span>
                                 <a href="#reviews" class="reviews-link">${product.reviews.toLocaleString()} reviews</a>
                             </div>
-                            
                             <div class="price-section">
                                 <span class="current-price">₦${product.price.toLocaleString()}</span>
                                 ${product.oldPrice ? `<span class="old-price">₦${product.oldPrice.toLocaleString()}</span>` : ''}
                                 ${product.discount > 0 ? `<span class="discount-badge">-${product.discount}%</span>` : ''}
                             </div>
-                            
-                            <div class="shipping-info">
-                                <i class="fas fa-truck"></i>
-                                <span>Free delivery <strong>tomorrow</strong> if you order within <strong>2h 30m</strong></span>
-                            </div>
-                            
-                            <!-- Color Options -->
-                            ${product.colors ? `
-                                <div class="options-section">
-                                    <div class="option-group">
-                                        <div class="option-label">Color:</div>
-                                        <div class="color-options" id="colorOptions">
-                                            ${colorOptionsHtml}
-                                        </div>
-                                    </div>
-                                </div>
-                            ` : ''}
-                            
-                            <!-- Size/Storage Options -->
-                            ${product.sizes ? `
-                                <div class="options-section">
-                                    <div class="option-group">
-                                        <div class="option-label">Storage/Size:</div>
-                                        <div class="size-options" id="sizeOptions">
-                                            ${sizeOptionsHtml}
-                                        </div>
-                                    </div>
-                                </div>
-                            ` : ''}
-                            
-                            <!-- Quantity -->
-                            <div class="options-section">
-                                <div class="option-label">Quantity:</div>
-                                <div class="quantity-selector">
-                                    <button class="qty-btn" id="qtyMinus">-</button>
-                                    <input type="number" class="qty-input" id="qtyInput" value="1" min="1" max="10">
-                                    <button class="qty-btn" id="qtyPlus">+</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Action Buttons -->
-                            <div class="action-buttons">
-                                <button class="btn-add-cart" id="addToCartBtn">
-                                    <i class="fas fa-shopping-cart"></i> ADD TO CART
-                                </button>
-                                <button class="btn-buy-now" id="buyNowBtn">
-                                    BUY NOW
-                                </button>
-                                <button class="btn-wishlist" id="wishlistBtn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            
-                            <!-- Product Meta -->
-                            <div class="product-meta-info" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
-                                <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-                                    <i class="fas fa-shield-alt" style="color: #27ae60;"></i>
-                                    <span style="font-size: 13px;">Official Jumia Warranty</span>
-                                </div>
-                                <div style="display: flex; gap: 15px;">
-                                    <i class="fas fa-undo" style="color: #27ae60;"></i>
-                                    <span style="font-size: 13px;">7 Days Returns</span>
-                                </div>
-                            </div>
+                            <div class="shipping-info"><i class="fas fa-truck"></i><span>Free delivery <strong>tomorrow</strong> if you order within <strong>2h 30m</strong></span></div>
+                            ${product.colors ? `<div class="options-section"><div class="option-group"><div class="option-label">Color:</div><div class="color-options" id="colorOptions">${colorOptionsHtml}</div></div></div>` : ''}
+                            ${product.sizes ? `<div class="options-section"><div class="option-group"><div class="option-label">Storage/Size:</div><div class="size-options" id="sizeOptions">${sizeOptionsHtml}</div></div></div>` : ''}
+                            <div class="options-section"><div class="option-label">Quantity:</div><div class="quantity-selector"><button class="qty-btn" id="qtyMinus">-</button><input type="number" class="qty-input" id="qtyInput" value="1" min="1" max="10"><button class="qty-btn" id="qtyPlus">+</button></div></div>
+                            <div class="action-buttons"><button class="btn-add-cart" id="addToCartBtn"><i class="fas fa-shopping-cart"></i> ADD TO CART</button><button class="btn-buy-now" id="buyNowBtn">BUY NOW</button><button class="btn-wishlist" id="wishlistBtn"><i class="far fa-heart"></i></button></div>
+                            <div class="product-meta-info" style="margin-top:20px;padding-top:15px;border-top:1px solid #f0f0f0;"><div style="display:flex;gap:15px;margin-bottom:10px;"><i class="fas fa-shield-alt" style="color:#27ae60;"></i><span style="font-size:13px;">Official Jumia Warranty</span></div><div style="display:flex;gap:15px;"><i class="fas fa-undo" style="color:#27ae60;"></i><span style="font-size:13px;">7 Days Returns</span></div></div>
                         </div>
-                        
-                        <!-- Seller Card -->
-                        <div class="seller-card">
-                            <h3>Seller Information</h3>
-                            <div class="seller-info">
-                                <p><strong>Jumia Official Store</strong></p>
-                                <p><i class="fas fa-star"></i> 98% Positive feedback</p>
-                                <p><i class="fas fa-box"></i> 10,000+ items sold</p>
-                                <p><i class="fas fa-clock"></i> Ships within 24 hours</p>
-                                <button class="chat-seller">Chat with Seller</button>
-                            </div>
-                        </div>
+                        <div class="seller-card"><h3>Seller Information</h3><div class="seller-info"><p><strong>Jumia Official Store</strong></p><p><i class="fas fa-star"></i> 98% Positive feedback</p><p><i class="fas fa-box"></i> 10,000+ items sold</p><p><i class="fas fa-clock"></i> Ships within 24 hours</p><button class="chat-seller">Chat with Seller</button></div></div>
                     </div>
                 </div>
-                
-                <!-- Description Section -->
-                <div class="description-section">
-                    <h3>Product Description</h3>
-                    <div class="description-text">
-                        <p>${product.description}</p>
-                        <ul class="specs-list">
-                            ${product.specs.map(spec => `<li>${spec}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Reviews Section -->
-                <div class="reviews-section" id="reviews">
-                    <h3>Customer Reviews</h3>
-                    <div class="review-summary">
-                        <div class="avg-rating">
-                            <div class="big-number">${product.rating}</div>
-                            <div class="stars">${generateStars(product.rating)}</div>
-                            <div>${product.reviews.toLocaleString()} ratings</div>
-                        </div>
-                    </div>
-                    <div class="reviews-list" id="reviewsList">
-                        ${generateSampleReviews(product.reviews)}
-                    </div>
-                </div>
+                <div class="description-section"><h3>Product Description</h3><div class="description-text"><p>${product.description}</p><ul class="specs-list">${product.specs.map(spec => `<li>${spec}</li>`).join('')}</ul></div></div>
+                <div class="reviews-section" id="reviews"><h3>Customer Reviews</h3><div class="review-summary"><div class="avg-rating"><div class="big-number">${product.rating}</div><div class="stars">${generateStars(product.rating)}</div><div>${product.reviews.toLocaleString()} ratings</div></div></div><div class="reviews-list">${sampleReviews.map(r => `<div class="review-item"><div class="review-header"><span class="reviewer-name">${r.name}</span><span class="review-date">${r.date}</span></div><div class="stars" style="font-size:12px;margin-bottom:8px;">${generateStars(r.rating)}</div><div class="review-text">${r.text}</div></div>`).join('')}</div></div>
             `;
             
-            // Setup thumbnail click handler
+            // Thumbnail logic
             const thumbnails = document.querySelectorAll('.thumbnail-item');
-            const mainImage = document.getElementById('mainProductImage');
-            
+            const mainImg = document.getElementById('mainProductImage');
             thumbnails.forEach(thumb => {
                 thumb.addEventListener('click', function() {
                     thumbnails.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    const newImage = this.getAttribute('data-image');
-                    if (mainImage) mainImage.src = newImage;
+                    if (mainImg) mainImg.src = this.getAttribute('data-image');
                 });
             });
+            const colorOpts = document.querySelectorAll('.color-option');
+            if (colorOpts.length) colorOpts[0]?.classList.add('active');
+            colorOpts.forEach(opt => opt.addEventListener('click', function() { colorOpts.forEach(o=>o.classList.remove('active')); this.classList.add('active'); }));
+            const sizeOpts = document.querySelectorAll('.size-option');
+            if (sizeOpts.length) sizeOpts[0]?.classList.add('active');
+            sizeOpts.forEach(opt => opt.addEventListener('click', function() { sizeOpts.forEach(o=>o.classList.remove('active')); this.classList.add('active'); }));
             
-            // Setup color options
-            const colorOptions = document.querySelectorAll('.color-option');
-            colorOptions.forEach(opt => {
-                opt.addEventListener('click', function() {
-                    colorOptions.forEach(o => o.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-            
-            // Setup size options
-            const sizeOptions = document.querySelectorAll('.size-option');
-            sizeOptions.forEach(opt => {
-                opt.addEventListener('click', function() {
-                    sizeOptions.forEach(o => o.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-            
-            // Set first options as active
-            if (colorOptions.length) colorOptions[0].classList.add('active');
-            if (sizeOptions.length) sizeOptions[0].classList.add('active');
-            
-            // Setup add to cart
-            const addToCartBtn = document.getElementById('addToCartBtn');
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', function() {
+            // quantity handlers
+            const minus = document.getElementById('qtyMinus'), plus = document.getElementById('qtyPlus'), qtyInp = document.getElementById('qtyInput');
+            if (minus && plus && qtyInp) {
+                minus.onclick = () => { let v = parseInt(qtyInp.value); if(v>1) qtyInp.value = v-1; };
+                plus.onclick = () => { let v = parseInt(qtyInp.value); if(v<10) qtyInp.value = v+1; };
+                qtyInp.onchange = () => { let v = parseInt(qtyInp.value); if(isNaN(v) || v<1) qtyInp.value = 1; else if(v>10) qtyInp.value = 10; };
+            }
+            const addBtn = document.getElementById('addToCartBtn');
+            if (addBtn) {
+                addBtn.onclick = () => {
                     const qty = parseInt(document.getElementById('qtyInput').value);
                     const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || null;
                     const selectedSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || null;
-                    
                     addToCart(product.id, qty, selectedColor, selectedSize);
                     showToast(`${product.name} added to cart!`);
-                    
-                    // Button animation
-                    const originalText = this.innerHTML;
-                    this.innerHTML = '<i class="fas fa-check"></i> ADDED';
-                    this.style.backgroundColor = '#27ae60';
-                    
-                    setTimeout(() => {
-                        this.innerHTML = originalText;
-                        this.style.backgroundColor = '#f68b1e';
-                    }, 2000);
-                });
+                    addBtn.innerHTML = '<i class="fas fa-check"></i> ADDED';
+                    addBtn.style.backgroundColor = '#27ae60';
+                    setTimeout(() => { addBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> ADD TO CART'; addBtn.style.backgroundColor = '#f68b1e'; }, 2000);
+                };
             }
-            
-            // Setup buy now
-            const buyNowBtn = document.getElementById('buyNowBtn');
-            if (buyNowBtn) {
-                buyNowBtn.addEventListener('click', function() {
-                    const qty = parseInt(document.getElementById('qtyInput').value);
-                    const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || null;
-                    const selectedSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || null;
-                    
-                    addToCart(product.id, qty, selectedColor, selectedSize);
-                    window.location.href = 'cart.html';
-                });
-            }
-            
-            // Setup wishlist
-            const wishlistBtn = document.getElementById('wishlistBtn');
-            if (wishlistBtn) {
-                wishlistBtn.addEventListener('click', function() {
-                    const icon = this.querySelector('i');
-                    if (icon.classList.contains('far')) {
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                        this.style.backgroundColor = '#fff5e6';
-                        showToast('Added to wishlist!');
-                    } else {
-                        icon.classList.remove('fas');
-                        icon.classList.add('far');
-                        this.style.backgroundColor = '';
-                        showToast('Removed from wishlist!');
-                    }
-                });
-            }
+            const buyNow = document.getElementById('buyNowBtn');
+            if (buyNow) buyNow.onclick = () => { const qty = parseInt(document.getElementById('qtyInput').value); const color = document.querySelector('.color-option.active')?.getAttribute('data-color'); const size = document.querySelector('.size-option.active')?.getAttribute('data-size'); addToCart(product.id, qty, color, size); window.location.href = 'cart.html'; };
+            const wishlist = document.getElementById('wishlistBtn');
+            if (wishlist) wishlist.onclick = function() { const icon = this.querySelector('i'); if(icon.classList.contains('far')){ icon.classList.remove('far'); icon.classList.add('fas'); this.style.backgroundColor='#fff5e6'; showToast('Added to wishlist!'); } else { icon.classList.remove('fas'); icon.classList.add('far'); this.style.backgroundColor=''; showToast('Removed from wishlist!'); } };
         }
         
         function renderRelatedProducts(currentId, category) {
             const container = document.getElementById('relatedProductsContainer');
+            if (!container) return;
             const related = getRelatedProducts(currentId, category);
-            
-            if (related.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            container.innerHTML = `
-                <div class="product-details-main" style="margin-top: 20px;">
-                    <h3 style="font-size: 20px; margin-bottom: 20px;">You May Also Like</h3>
-                    <div class="products-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
-                        ${related.map(product => `
-                            <div class="product-card" data-product-id="${product.id}" style="cursor: pointer;">
-                                ${product.discount > 0 ? `<div class="discount-badge">-${product.discount}%</div>` : ''}
-                                <div class="product-image">
-                                    <img src="${product.image}" alt="${product.name}">
-                                    <div class="product-actions">
-                                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                    </div>
-                                </div>
-                                <div class="product-details">
-                                    <h4 class="product-name">${product.name}</h4>
-                                    <div class="product-price">₦${product.price.toLocaleString()}</div>
-                                    ${product.oldPrice ? `<div class="product-old-price">₦${product.oldPrice.toLocaleString()}</div>` : ''}
-                                    <div class="product-rating">
-                                        <div class="stars">
-                                            ${generateStars(product.rating)}
-                                        </div>
-                                        <span>(${product.reviews})</span>
-                                    </div>
-                                    <button class="add-cart-btn" data-name="${product.name}" data-price="${product.price}">ADD TO CART</button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            
-            // Add click handlers for related products
+            if (!related.length) { container.innerHTML = ''; return; }
+            container.innerHTML = `<div class="product-details-main" style="margin-top:20px;"><h3 style="font-size:20px;margin-bottom:20px;">You May Also Like</h3><div class="products-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;">${related.map(p => `<div class="product-card" data-product-id="${p.id}" style="cursor:pointer;">${p.discount>0?`<div class="discount-badge" style="position:absolute;top:8px;left:8px;z-index:2;">-${p.discount}%</div>`:''}<div class="product-image"><img src="${p.image}" alt="${p.name}" style="width:100%;height:180px;object-fit:contain;"><div class="product-actions"><button class="wishlist-btn"><i class="far fa-heart"></i></button></div></div><div class="product-details"><h4 class="product-name" style="font-size:14px;margin:8px 0;">${p.name}</h4><div class="product-price" style="color:#e74c3c;font-weight:700;">₦${p.price.toLocaleString()}</div>${p.oldPrice?`<div class="product-old-price" style="text-decoration:line-through;font-size:12px;color:#999;">₦${p.oldPrice.toLocaleString()}</div>`:''}<div class="product-rating" style="display:flex;align-items:center;gap:4px;"><div class="stars" style="font-size:10px;">${generateStars(p.rating)}</div><span style="font-size:12px;">(${p.reviews})</span></div><button class="add-cart-btn" data-name="${p.name}" data-price="${p.price}" style="width:100%;margin-top:8px;padding:6px;background:#f68b1e;border:none;color:#fff;border-radius:4px;cursor:pointer;">ADD TO CART</button></div></div>`).join('')}</div></div>`;
             document.querySelectorAll('#relatedProductsContainer .product-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('add-cart-btn') && !e.target.closest('.add-cart-btn') &&
-                        !e.target.classList.contains('wishlist-btn') && !e.target.closest('.wishlist-btn')) {
-                        const productId = this.getAttribute('data-product-id');
-                        if (productId) {
-                            window.location.href = `product-details.html?id=${productId}`;
-                        }
-                    }
-                });
+                card.addEventListener('click', (e) => { if(!e.target.classList.contains('add-cart-btn') && !e.target.closest('.add-cart-btn') && !e.target.classList.contains('wishlist-btn') && !e.target.closest('.wishlist-btn')) { const pid = card.getAttribute('data-product-id'); if(pid) window.location.href = `product-details.html?id=${pid}`; } });
             });
-            
-            // Add to cart handlers for related products
             document.querySelectorAll('#relatedProductsContainer .add-cart-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const productName = this.getAttribute('data-name');
-                    addToCart(parseInt(this.closest('.product-card').getAttribute('data-product-id')), 1);
-                    showToast(`${productName} added to cart!`);
-                    
-                    const originalText = this.textContent;
-                    this.textContent = '✓ ADDED';
-                    this.style.backgroundColor = '#27ae60';
-                    
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                        this.style.backgroundColor = '';
-                    }, 2000);
-                });
+                btn.addEventListener('click', (e) => { e.stopPropagation(); const productName = btn.getAttribute('data-name'); const pid = parseInt(btn.closest('.product-card').getAttribute('data-product-id')); addToCart(pid, 1); showToast(`${productName} added to cart!`); btn.textContent = '✓ ADDED'; btn.style.backgroundColor = '#27ae60'; setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.style.backgroundColor = '#f68b1e'; }, 2000); });
             });
         }
         
-        function setupQuantitySelector() {
-            const minusBtn = document.getElementById('qtyMinus');
-            const plusBtn = document.getElementById('qtyPlus');
-            const qtyInput = document.getElementById('qtyInput');
-            
-            if (minusBtn && plusBtn && qtyInput) {
-                minusBtn.addEventListener('click', () => {
-                    let value = parseInt(qtyInput.value);
-                    if (value > 1) qtyInput.value = value - 1;
-                });
-                
-                plusBtn.addEventListener('click', () => {
-                    let value = parseInt(qtyInput.value);
-                    if (value < 10) qtyInput.value = value + 1;
-                });
-                
-                qtyInput.addEventListener('change', () => {
-                    let value = parseInt(qtyInput.value);
-                    if (isNaN(value) || value < 1) qtyInput.value = 1;
-                    else if (value > 10) qtyInput.value = 10;
-                });
-            }
-        }
-        
-        function generateStars(rating) {
-            const fullStars = Math.floor(rating);
-            const hasHalfStar = rating % 1 >= 0.5;
-            let stars = '';
-            
-            for (let i = 0; i < fullStars; i++) {
-                stars += '<i class="fas fa-star"></i>';
-            }
-            if (hasHalfStar) {
-                stars += '<i class="fas fa-star-half-alt"></i>';
-            }
-            for (let i = stars.length / 2; i < 5; i++) {
-                stars += '<i class="far fa-star"></i>';
-            }
-            
-            return stars;
-        }
-        
-        function generateSampleReviews(totalReviews) {
-            const sampleReviews = [
-                { name: "Oluwaseun A.", date: "2 days ago", rating: 5, text: "Amazing product! Exceeded my expectations. Fast delivery too." },
-                { name: "Chioma N.", date: "1 week ago", rating: 4, text: "Good quality product. Works perfectly. Would recommend." },
-                { name: "Emeka O.", date: "2 weeks ago", rating: 5, text: "Very satisfied with my purchase. Great value for money." },
-                { name: "Fatima B.", date: "3 weeks ago", rating: 4, text: "Nice product. Delivery was quick and packaging was secure." }
-            ];
-            
-            return sampleReviews.map(review => `
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="reviewer-name">${review.name}</span>
-                        <span class="review-date">${review.date}</span>
-                    </div>
-                    <div class="stars" style="font-size: 12px; margin-bottom: 8px;">
-                        ${generateStars(review.rating)}
-                    </div>
-                    <div class="review-text">${review.text}</div>
-                </div>
-            `).join('');
-        }
-        
-        function getColorCode(color) {
-            const colors = {
-                'Black': '#2c3e50',
-                'Blue': '#3498db',
-                'Red': '#e74c3c',
-                'Silver': '#bdc3c7',
-                'Gold': '#f39c12',
-                'White': '#ecf0f1',
-                'Deep Purple': '#5e3370',
-                'Space Black': '#1a1a1a',
-                'Midnight': '#2c3e50',
-                'Starlight': '#f5f0e6',
-                'Product Red': '#e31b23'
-            };
-            return colors[color] || '#95a5a6';
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (!productId) { window.location.href = 'index.html'; return; }
+            const product = getProductById(parseInt(productId));
+            if (!product) { window.location.href = 'index.html'; return; }
+            document.getElementById('breadcrumbCategory').textContent = product.category;
+            document.getElementById('breadcrumbProduct').textContent = product.name;
+            renderProductDetails(product);
+            renderRelatedProducts(product.id, product.category);
+        });
     </script>
 </body>
 </html>
