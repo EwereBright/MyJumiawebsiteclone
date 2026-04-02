@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartBadge = document.getElementById('cartBadge');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
-    let cartCount = 0;
+    let cartCount = 1;
 
     function showToast(message) {
         toastMessage.textContent = message;
