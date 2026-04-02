@@ -17,6 +17,33 @@
     --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
 }
+/* ==================== FIX HEADER OVERLAP ON ALL PAGES ==================== */
+body {
+    padding-top: 0; /* reset if needed */
+    margin: 0;
+}
+
+/* Total height of top-bar + main-header + nav */
+body {
+    padding-top: 145px;   /* ← Start with this value */
+}
+
+/* Modern way for smooth scrolling to sections */
+html {
+    scroll-padding-top: 145px;
+}
+
+/* Make sure the sticky product gallery doesn't fight with the header */
+.product-gallery {
+    position: sticky;
+    top: 145px !important;   /* ← Change this to match body padding-top */
+    z-index: 10;
+}
+
+/* Extra safety for the main content area */
+.main-content {
+    padding-top: 20px;
+}
 
 body {
    /* Make the Nexus banner fully responsive and remove extra space */
