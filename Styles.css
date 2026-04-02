@@ -58,7 +58,7 @@ body {
 
 .banner img {
     width: 100% !important;
-    height: auto !important;
+    height: 50% !important;
     max-width: 100% !important;
     display: block !important;  /* removes the default white space below inline images */
     object-fit: cover;          /* keeps proportions nicely, crops if needed */
