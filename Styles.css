@@ -710,7 +710,7 @@ body {
     align-items: center;
     margin-bottom: 20px;
     background-color: var(--jumia-red);
-    padding: auto;
+    padding: 16;
 }
 
 .flash-title-wrapper {
