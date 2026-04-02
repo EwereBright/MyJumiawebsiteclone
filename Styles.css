@@ -1063,7 +1063,7 @@ body {
 }
 
 .product-badge {
-    position: absolute;
+    position: relative;
     top: 8px;
     left: 8px;
     background-color: var(--jumia-green);
