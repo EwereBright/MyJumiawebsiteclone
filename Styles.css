@@ -41,7 +41,7 @@ body {
    TOP BLACK BAR
    ========================================== */
 .top-bar {
-    background-color: var(#F1F1F2);
+    background-color: var(hsla(240, 4%, 95%, 0.397)8ca2);
     color: var(--jumia-black);
     padding: 4px 0;
     font-size: 12px;
